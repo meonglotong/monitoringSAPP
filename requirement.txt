@@ -1,0 +1,4 @@
+ttkthemes
+python-dotenv
+pandas
+reportlab
