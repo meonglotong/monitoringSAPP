@@ -7,6 +7,7 @@ import logging
 import recap_zabbix
 import report_email
 import memo_manager
+from assistant.assistant_rag import create_assistant
 
 logging.basicConfig(filename="app.log", level=logging.ERROR)
 
@@ -87,6 +88,39 @@ def open_report_email():
         logging.error(f"Gagal mengimpor report_email: {str(e)}")
         messagebox.showerror("Error", f"Gagal membuka Report Email: {str(e)}")
 
+def open_assistant():
+    print("Membuka Asisten Virtual")
+    frame_pilihan.pack_forget()
+    assistant_frame = tk.Frame(window, bg="#f5f6f5")
+    assistant_frame.pack(expand=True, fill="both")
+
+    # Buat asisten virtual
+    qa = create_assistant()
+
+    def tanya():
+        pertanyaan = entry_pertanyaan.get()
+        if not pertanyaan.strip():
+            return
+        jawaban = qa(pertanyaan)  # Gunakan fungsi tanya dari create_assistant()
+        hasil_text.insert(tk.END, f"🧑: {pertanyaan}\n🤖: {jawaban}\n\n")
+        entry_pertanyaan.delete(0, tk.END)
+
+    label = tk.Label(assistant_frame, text="Tanya Asisten", font=("Helvetica", 16), bg="#f5f6f5")
+    label.pack(pady=10)
+
+    hasil_text = tk.Text(assistant_frame, height=20, wrap="word", font=("Helvetica", 12))
+    hasil_text.pack(padx=20, pady=10, fill="both", expand=True)
+
+    entry_pertanyaan = tk.Entry(assistant_frame, font=("Helvetica", 12))
+    entry_pertanyaan.pack(padx=20, pady=(10, 0), fill="x")
+    entry_pertanyaan.bind("<Return>", lambda event: tanya())
+
+    btn_kirim = ttk.Button(assistant_frame, text="Kirim", command=tanya)
+    btn_kirim.pack(pady=(5, 20))
+
+    btn_kembali = ttk.Button(assistant_frame, text="Kembali", command=lambda: [assistant_frame.pack_forget(), frame_pilihan.pack(expand=True, fill="both")])
+    btn_kembali.pack()
+
 def open_memo_manager():
     print("Membuka memo manager")
     frame_pilihan.pack_forget()
@@ -138,7 +172,7 @@ btn_recap.grid(row=0, column=0, padx=10, pady=10)
 btn_report = create_styled_button(button_frame, "Report Email", open_report_email, "#2ecc71", tooltip_text="Kirim laporan via email", width=15)
 btn_report.grid(row=0, column=1, padx=10, pady=10)
 
-btn_assistant = create_styled_button(button_frame, "Assistant", lambda: messagebox.showinfo("Info", "Fitur Asisten Virtual - Coming Soon!"), "#e67e22", tooltip_text="Dapatkan bantuan dari asisten virtual", width=15)
+btn_assistant = create_styled_button(button_frame, "Assistant", open_assistant, "#e67e22", tooltip_text="Dapatkan bantuan dari asisten virtual", width=15)
 btn_assistant.grid(row=0, column=2, padx=10, pady=10)
 
 btn_memo = create_styled_button(button_frame, "Memo", open_memo_manager, "#f1c40f", tooltip_text="Catat dan kelola memo", width=15)
@@ -152,3 +186,9 @@ btn_keluar.grid(row=1, column=2, padx=10, pady=10)
 
 print("Memulai mainloop")
 window.mainloop()
+
+if __name__ == "__main__":
+    asisten = create_assistant()
+    pertanyaan = "Apa itu AI?"
+    jawaban = asisten(pertanyaan)
+    print("🤖:", jawaban)

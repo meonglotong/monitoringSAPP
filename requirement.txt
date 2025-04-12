@@ -2,3 +2,11 @@ ttkthemes
 python-dotenv
 pandas
 reportlab
+logging
+langchain
+langchain-community
+langchain-ollama
+sentence-transformers
+faiss-cpu
+PyPDF2
+tk
