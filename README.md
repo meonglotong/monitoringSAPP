@@ -25,7 +25,7 @@
 
 ### Persyaratan
 
-Pastikan Anda memiliki Python versi 3.7 atau lebih tinggi. Anda juga memerlukan beberapa pustaka Python untuk menjalankan aplikasi ini.
+Pastikan Anda memiliki Python versi 3.11 atau lebih tinggi. Anda juga memerlukan beberapa pustaka Python untuk menjalankan aplikasi ini.
 
 1. **Install Python Dependencies**
 
