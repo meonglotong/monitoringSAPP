@@ -34,8 +34,7 @@ Pastikan Anda memiliki Python versi 3.7 atau lebih tinggi. Anda juga memerlukan 
    ```bash
    pip install -r requirements.txt
 2. **Setup Lingkungan**
-
-  Pastikan Anda memiliki akses ke Zabbix server (untuk fitur recap Zabbix) dan konfigurasi server email yang benar untuk fitur email.
+   Pastikan Anda memiliki akses ke Zabbix server (untuk fitur recap Zabbix) dan konfigurasi server email yang benar untuk fitur email.
 
   - **Zabbix Recap**: Pastikan Zabbix server sudah terhubung dan dikonfigurasi dengan benar di file recap_zabbix.py.
   - **Email Report**: Siapkan pengaturan email di file report_email.py (seperti SMTP server, pengaturan login, dll).
@@ -46,8 +45,7 @@ Pastikan Anda memiliki Python versi 3.7 atau lebih tinggi. Anda juga memerlukan 
   - **Vectorstore**: Sistem menggunakan FAISS untuk menyimpan vektor dari PDF. Pada pertama kali aplikasi dijalankan, vectorstore akan dibuat dari file PDF yang ada.
 
 4. **Memulai Aplikasi**
-
-  Untuk memulai aplikasi, jalankan file app.py:
+   Untuk memulai aplikasi, jalankan file app.py:
 
   ```bash
   python app.py
