@@ -1,6 +1,5 @@
 # Monitoring SAPP
 ![image](https://github.com/user-attachments/assets/603b6674-dbfc-416f-9a89-5a4a12d53a88)
-![sapp feature](https://github.com/user-attachments/assets/870718ac-a8a6-4348-b9f2-f5051ef12d31)
 
 **Monitoring SAPP** adalah aplikasi berbasis desktop menggunakan Tkinter yang memungkinkan operator untuk mengelola dan memonitor Zabbix, mengirim laporan email, mengelola memo, dan berinteraksi dengan asisten virtual berbasis RAG (Retrieval-Augmented Generation).
 
