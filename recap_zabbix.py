@@ -1,7 +1,8 @@
 import os
 import re
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+import ttkbootstrap as ttkb
+from ttkbootstrap.constants import *
 import pandas as pd
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
@@ -10,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 import logging
+from tkinter import messagebox, filedialog
 
 logging.basicConfig(filename="app.log", level=logging.ERROR)
 
@@ -227,25 +229,28 @@ def setup_recap_frame(frame, operator_name, kembali_callback):
     for widget in frame.winfo_children():
         widget.destroy()
 
-    frame.configure(bg="#f5f6f5")
-    main_container = tk.Frame(frame, bg="#f5f6f5")
+    main_container = tk.Frame(frame)
     main_container.pack(expand=True, fill="both")
 
-    canvas_frame = tk.Frame(main_container, bg="#f5f6f5", width=800, height=650)
-    canvas_frame.pack(side="top", padx=(100,0), pady=20, expand=False)
+    canvas_frame = tk.Frame(main_container, width=1920, height=1080)
+    canvas_frame.pack(side="top", padx=0, pady=20, expand=False)
     canvas_frame.pack_propagate(False)
 
-    canvas = tk.Canvas(canvas_frame, bg="#f5f6f5", width=800, height=650, bd=0, highlightthickness=0)
+    canvas = tk.Canvas(canvas_frame, width=1920, height=1080, bd=0, highlightthickness=0)
     canvas.pack(side="left", fill="both", expand=True)
 
-    scrollable_frame = tk.Frame(canvas, bg="#f5f6f5")
-    canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+    scrollbar = ttkb.Scrollbar(canvas_frame, orient="vertical", command=canvas.yview, bootstyle=SECONDARY)
+    scrollbar.pack(side="right", fill="y")
+    canvas.configure(yscrollcommand=scrollbar.set)
+
+    scrollable_frame = tk.Frame(canvas)
+    canvas.create_window((400, 20), window=scrollable_frame, anchor="nw")
     scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
 
     from ui_utils import create_styled_label
     create_styled_label(scrollable_frame, "🛠️ Recap Zabbix", 20).pack(pady=(20, 10))
 
-    input_frame = tk.LabelFrame(scrollable_frame, text="Input Data", font=("Segoe UI", 12, "bold"), bg="#f5f6f5", fg="#34495e", padx=15, pady=10, bd=2, relief="groove")
+    input_frame = ttkb.LabelFrame(scrollable_frame, text="Input Data", padding=15)
     input_frame.pack(pady=20)
 
     create_styled_label(input_frame, "📁 Pilih File CSV:").grid(row=0, column=0, sticky="w", padx=10, pady=5)
@@ -256,24 +261,28 @@ def setup_recap_frame(frame, operator_name, kembali_callback):
             files_var.clear()
             files_var.extend(files)
             status_label.config(text=f"{len(files)} file diunggah ✅", fg="green")
-    from ui_utils import create_styled_button
-    create_styled_button(input_frame, "Unggah File", upload_files, "#3498db", tooltip_text="Unggah file CSV untuk analisis").grid(row=0, column=1, pady=5, padx=5)
 
-    create_styled_label(input_frame, "⏱️ Pilih Shift:", bg_color="#f5f6f5").grid(row=1, column=0, sticky="w", padx=10, pady=5)
+    from ui_utils import create_tooltip
+    btn_upload = ttkb.Button(input_frame, text="Unggah File", command=upload_files, bootstyle=INFO)
+    btn_upload.grid(row=0, column=1, pady=5, padx=5)
+    create_tooltip(btn_upload, "Unggah file CSV untuk analisis")
+
+    create_styled_label(input_frame, "⏱️ Pilih Shift:").grid(row=1, column=0, sticky="w", padx=10, pady=5)
     shift_var = tk.StringVar(value="D")
-    ttk.Combobox(input_frame, textvariable=shift_var, values=["A", "C", "M", "D"], width=10).grid(row=1, column=1, pady=5)
+    shift_combobox = ttkb.Combobox(input_frame, textvariable=shift_var, values=["A", "C", "M", "D"], width=10)
+    shift_combobox.grid(row=1, column=1, pady=5)
 
-    report_frame = tk.Frame(scrollable_frame, bg="#f5f6f5")
+    report_frame = tk.Frame(scrollable_frame)
     report_frame.pack(pady=10)
     report_text = tk.Text(report_frame, height=18, width=100, font=("Consolas", 10), borderwidth=1, relief="solid", padx=5, pady=5, wrap=tk.WORD)
-    text_scroll = tk.Scrollbar(report_frame, command=report_text.yview)
+    text_scroll = ttkb.Scrollbar(report_frame, command=report_text.yview, bootstyle=SECONDARY)
     report_text.configure(yscrollcommand=text_scroll.set)
     text_scroll.pack(side="right", fill="y")
     report_text.pack(side="left", fill="x")
 
-    button_frame = tk.Frame(scrollable_frame, bg="#f5f6f5")
+    button_frame = tk.Frame(scrollable_frame)
     button_frame.pack(pady=20)
-    progress = ttk.Progressbar(button_frame, mode="indeterminate")
+    progress = ttkb.Progressbar(button_frame, mode="indeterminate", bootstyle=INFO)
 
     def generate_report():
         if not files_var:
@@ -299,18 +308,28 @@ def setup_recap_frame(frame, operator_name, kembali_callback):
         progress.stop()
         progress.grid_forget()
 
-    create_styled_button(button_frame, "📝 Generate Report", generate_report, "#2ecc71", tooltip_text="Buat laporan dari data CSV").grid(row=0, column=0, padx=5)
-    create_styled_button(button_frame, "📄 Export to PDF", save_pdf, "#e67e22", tooltip_text="Ekspor laporan ke PDF").grid(row=0, column=1, padx=5)
-    create_styled_button(button_frame, "🔙 Kembali", kembali_callback, "#e74c3c", tooltip_text="Kembali ke menu utama").grid(row=0, column=2, padx=5)
+    btn_generate = ttkb.Button(button_frame, text="📝 Generate Report", command=generate_report, bootstyle=SUCCESS)
+    btn_generate.grid(row=0, column=0, padx=5)
+    create_tooltip(btn_generate, "Buat laporan dari data CSV")
+
+    btn_export = ttkb.Button(button_frame, text="📄 Export to PDF", command=save_pdf, bootstyle=WARNING)
+    btn_export.grid(row=0, column=1, padx=5)
+    create_tooltip(btn_export, "Ekspor laporan ke PDF")
+
+    btn_kembali = ttkb.Button(button_frame, text="🔙 Kembali", command=kembali_callback, bootstyle=SECONDARY)
+    btn_kembali.grid(row=0, column=2, padx=5)
+    create_tooltip(btn_kembali, "Kembali ke menu utama")
 
     status_label = create_styled_label(scrollable_frame, "")
     status_label.pack(pady=10)
 
 if __name__ == "__main__":
-    root = tk.Tk()
+    # Menggunakan tema dari ui_utils.py
+    from ui_utils import get_theme
+    root = ttkb.Window(themename=get_theme())
     root.title("Zabbix Recap")
-    root.geometry("1280x720")
-    frame = tk.Frame(root, bg="#f5f6f5")
+    root.geometry("1920x1080")
+    frame = tk.Frame(root)
     frame.pack(expand=True, fill=tk.BOTH)
     setup_recap_frame(frame, "Test Operator", lambda: print("Kembali"))
     root.mainloop()

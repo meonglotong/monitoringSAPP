@@ -1,19 +1,18 @@
 import tkinter as tk
-from tkinter import ttk
 
-def create_styled_button(parent, text, command, bg_color, fg_color="white", tooltip_text=None, width=15):
-    btn = tk.Button(
-        parent, text=text, command=command, bg=bg_color, fg=fg_color,
-        font=("Segoe UI", 10, "bold"), relief="flat", padx=10, width=width
-    )
-    if tooltip_text:
-        create_tooltip(btn, tooltip_text)
-    return btn
+# Variabel global untuk tema
+THEME_NAME = "cyborg"  # Anda bisa mengganti tema di sini (misalnya "litera", "darkly", dll.)
 
-def create_styled_label(parent, text, font_size=11, bg_color="#f5f6f5", fg_color="#34495e"):
-    return tk.Label(parent, text=text, font=("Segoe UI", font_size), bg=bg_color, fg=fg_color)
+def get_theme():
+    """Mengembalikan nama tema yang digunakan."""
+    return THEME_NAME
+
+def create_styled_label(parent, text, font_size=11):
+    """Membuat label dengan gaya standar."""
+    return tk.Label(parent, text=text, font=("Segoe UI", font_size))
 
 def create_tooltip(widget, text):
+    """Membuat tooltip untuk widget."""
     tooltip = None
     def enter(event):
         nonlocal tooltip
