@@ -49,5 +49,23 @@ Pastikan Anda memiliki Python versi 3.11 atau lebih tinggi. Anda juga memerlukan
 4. **Memulai Aplikasi**
    Untuk memulai aplikasi, jalankan file app.py:
 
-  ```bash
+```bash
   python app.py
+```
+
+## Screenshot UI
+   1. **Tampilan login**
+   ![image](https://github.com/user-attachments/assets/c0513d0d-2cae-4543-8c14-f709fc09cc74)
+   2. **Tampilan menu**
+   ![image](https://github.com/user-attachments/assets/3c920c42-e724-4f00-a93e-1579f493bd99)
+   3. **Menu rekap zabbix**
+   ![image](https://github.com/user-attachments/assets/ec43c648-6a12-404f-8ae9-e5d817ff16b2)
+   4. **Menu report email**
+   ![image](https://github.com/user-attachments/assets/37daa741-1b7b-405a-9175-fba229664ac3)
+   5. **Menu assistant**
+   ![image](https://github.com/user-attachments/assets/86cf8b46-8a99-4da7-a36d-e676c65966d4)
+   6. **Menu memo**
+   ![image](https://github.com/user-attachments/assets/936490df-7dbe-4073-a851-e6cefb8d8b83)
+
+
+
